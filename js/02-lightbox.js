@@ -16,11 +16,13 @@ galleryEl.insertAdjacentHTML('beforeend', arrayGalleryItems);
 galleryEl.addEventListener('click', onGalleryItemClick);
 
 function onGalleryItemClick(e) {
+  if (e.target.nodeName !== 'IMG') {
+    return;
+  }
   e.preventDefault();
 
   var lightbox = new SimpleLightbox('.gallery a', {
-    captions: true,
-    captionSelector: e.target.alt,
+    captionsData: 'alt',
     captionDelay: 250,
   });
 }
