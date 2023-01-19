@@ -28,16 +28,18 @@ function onGalleryItemClick(e) {
   }
   e.preventDefault();
 
-  const instance = basicLightbox.create(`<img src="${e.target.dataset.source}">`, {
-    onShow: instance => {
-      document.onkeydown = function (e) {
-        e.preventDefault();
-        if (e.code == 'Escape') {
-          instance.close();
-        }
-      };
-    },
-  });
+  const instance = basicLightbox.create(`<img src="${e.target.dataset.source}">`);
 
   instance.show();
+
+  if (instance.show()) {
+    document.addEventListener('keydown', function onEscExitPress(e) {
+      if (e.code === 'Escape') {
+        instance.close(() => {
+          document.removeEventListener('keydown', onEscExitPress);
+          document.removeEventListener('click', onGalleryItemClick);
+        });
+      }
+    });
+  }
 }
